@@ -29,12 +29,13 @@ class App
   end
 
   def checking_args(args)
-    time_formatter_res = TimeFormatter.checking_args(args)
+    tf = TimeFormatter.new(args)
+    tf.call
 
-    if time_formatter_res.has_key?(:unknown)
-      response(400, "Unknown time format [#{time_formatter_res[:unknown]}]")
+    if tf.success?
+      response(200, tf.time_string)
     else
-      response(200, TimeFormatter.new.call(time_formatter_res[:correсt]))
+      response(400, tf.invalid_params)
     end
   end
 
